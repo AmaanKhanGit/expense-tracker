@@ -68,6 +68,8 @@ async function sendEmail(to, subject, verificationToken) {
                 </a>
             </div>
 
+            <p> here : ${verificationLink}</p>
+
             <p style="
                 color: #71717a;
                 font-size: 14px;
@@ -108,7 +110,6 @@ async function sendEmail(to, subject, verificationToken) {
     if (error) {
       return console.error(error);
     }
-    console.log("email sent: ", data);
   } catch (error) {
     console.error(error);
   }
