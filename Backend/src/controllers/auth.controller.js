@@ -2,6 +2,7 @@ const userModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const sendEmail = require("../services/email.service");
+const jwt = require("jsonwebtoken");
 
 // register user
 async function registerUser(req, res) {
@@ -96,9 +97,49 @@ async function verifyEmail(req, res) {
   });
 }
 
+async function login(req, res) {
+  const { email, password } = req.body;
 
-async function login(req,res){
-  
+  const user = await userModel.findOne({
+    email: email,
+  });
+
+  if (!user) {
+    return res.status(400).json({
+      message: "invalid credentials",
+    });
+  }
+
+  if (!user.isEmailVerified) {
+    return res.status(400).json({
+      message: "please verify your email first",
+    });
+  }
+
+  const isPassValid = await bcrypt.compare(password, user.password);
+
+  if (!isPassValid) {
+    return res.status(400).json({
+      message: "invalid password",
+    });
+  }
+
+  const token = jwt.sign(
+    {
+      id: user._id,
+    },
+    process.env.JWT_SECRET,
+  );
+
+  res.cookie("token", token);
+
+  res.status(200).json({
+    message: "user login successfully",
+    user: {
+      name: user.name,
+      email: user.email,
+    },
+  });
 }
 
-module.exports = { registerUser, verifyEmail ,login};
+module.exports = { registerUser, verifyEmail, login };
