@@ -142,4 +142,11 @@ async function login(req, res) {
   });
 }
 
-module.exports = { registerUser, verifyEmail, login };
+async function logout(req, res) {
+  res.clearCookie("token");
+  res.status(200).json({
+    message: "logout successfull",
+  });
+}
+
+module.exports = { registerUser, verifyEmail, login, logout };
