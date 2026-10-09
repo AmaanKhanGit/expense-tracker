@@ -1,10 +1,18 @@
-const Resend = require("resend");
+import "dotenv/config";
+import { Resend } from "resend";
 
-const resend = new Resend.Resend(process.env.RESEND_API_KEY);
+const getResendClient = (): Resend => {
+  return new Resend(process.env.RESEND_API_KEY);
+};
 
-async function sendEmail(to, subject, verificationToken) {
+export async function sendEmail(
+  to: string,
+  subject: string,
+  verificationToken: string
+): Promise<void> {
   const verificationLink = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
   try {
+    const resend = getResendClient();
     const { data, error } = await resend.emails.send({
       from: "Expense Tracker <onboarding@resend.dev>",
       to,
@@ -108,11 +116,12 @@ async function sendEmail(to, subject, verificationToken) {
     });
 
     if (error) {
-      return console.error(error);
+      console.error(error);
+      return;
     }
   } catch (error) {
     console.error(error);
   }
 }
 
-module.exports = sendEmail;
+export default sendEmail;
