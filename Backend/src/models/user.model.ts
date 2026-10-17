@@ -1,17 +1,5 @@
-import mongoose, { Document, Model, Schema } from "mongoose";
-
-export interface IUser {
-  name: string;
-  email: string;
-  password: string;
-  isEmailVerified: boolean;
-  emailVerificationTokenHash?: string | null;
-  emailVerificationTokenExpiresAt?: Date | null;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-export interface IUserDocument extends IUser, Document {}
+import mongoose, { Model, Schema } from "mongoose";
+import { IUserDocument } from "../types/user.type";
 
 const userSchema = new Schema<IUserDocument>(
   {
@@ -46,9 +34,12 @@ const userSchema = new Schema<IUserDocument>(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-const userModel: Model<IUserDocument> = mongoose.model<IUserDocument>("user", userSchema);
+const userModel: Model<IUserDocument> = mongoose.model<IUserDocument>(
+  "user",
+  userSchema,
+);
 
 export default userModel;

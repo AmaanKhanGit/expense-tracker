@@ -4,6 +4,7 @@ import express, { Application } from "express";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes";
 import { errorHandler } from "./middlewares/error.middleware";
+import transactionRoutes from "./routes/transaction.route";
 
 // create server instance
 const app: Application = express();
@@ -14,8 +15,11 @@ app.use(express.json());
 // to read cookies
 app.use(cookieParser());
 
-// use routers
+// use routes
 app.use("/api/auth", authRoutes);
+
+// transaction routes
+app.use("/api/transaction", transactionRoutes);
 
 // error handler middleware
 app.use(errorHandler);
