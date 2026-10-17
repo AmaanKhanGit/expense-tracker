@@ -10,7 +10,7 @@ interface AuthTokenPayload extends JwtPayload {
 export async function authUser(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
   try {
     const { accessToken } = req.cookies || {};
