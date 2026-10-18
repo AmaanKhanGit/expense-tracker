@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Types } from "mongoose";
 
 // validation for type
 export enum typeType {
@@ -7,12 +7,11 @@ export enum typeType {
 }
 
 export interface TransactionType {
-  userId: Schema.Types.ObjectId;
+  userId: Types.ObjectId;
   amount: number;
   type: typeType; // validation for type
   category: string;
   description?: string;
-  date: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }

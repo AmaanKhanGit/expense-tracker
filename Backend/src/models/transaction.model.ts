@@ -1,10 +1,10 @@
-import mongoose, { Model, Schema } from "mongoose";
+import mongoose, { Model, Schema, Types } from "mongoose";
 import { TransactionType, typeType } from "../types/transaction.type";
 
 const transactionSchema = new Schema<TransactionType>(
   {
     userId: {
-      type: Schema.Types.ObjectId,
+      type: Types.ObjectId,
       required: true,
       ref: "user",
     },
@@ -23,10 +23,6 @@ const transactionSchema = new Schema<TransactionType>(
     },
     description: {
       type: String,
-    },
-    date: {
-      type: Date,
-      required: true,
     },
   },
   {
