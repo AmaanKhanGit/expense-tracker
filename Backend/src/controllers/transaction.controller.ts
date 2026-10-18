@@ -4,6 +4,7 @@ import AppError from "../error/AppError";
 import transactionModel from "../models/transaction.model";
 import { IUserDocument } from "../types/user.type";
 
+// add transaction
 export async function addTransaction(
   req: Request<{}, {}, TransactionType>,
   res: Response,
@@ -29,6 +30,25 @@ export async function addTransaction(
     res.status(201).json({
       message: "transaction added successfulyy",
       transaction,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+// get transaction
+
+export async function getTransaction(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const transactions = await transactionModel.find();
+
+    res.status(200).json({
+      message: "transaction fetched!",
+      transactions,
     });
   } catch (error) {
     next(error);
