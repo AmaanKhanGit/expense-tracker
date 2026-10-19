@@ -19,7 +19,7 @@ export async function addTransaction(
 
     const user: IUserDocument = req.user;
 
-    const transaction = await transactionModel.create({
+    await transactionModel.create({
       userId: user._id,
       amount,
       type,
@@ -29,7 +29,6 @@ export async function addTransaction(
 
     res.status(201).json({
       message: "transaction added successfulyy",
-      transaction,
     });
   } catch (error) {
     next(error);
@@ -44,11 +43,45 @@ export async function getTransaction(
   next: NextFunction,
 ) {
   try {
-    const transactions = await transactionModel.find();
+    const userId = req.user._id;
+
+    const transactions = await transactionModel
+      .find({
+        userId: userId,
+      })
+      .sort({ createdAt: -1 })
+      .skip(0)
+      .limit(10);
 
     res.status(200).json({
       message: "transaction fetched!",
       transactions,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+// delete transaction by id
+
+export async function deleteById(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const id = req.params.id;
+    const userId = req.user._id;
+
+    const transaction = await transactionModel.findOneAndDelete({
+      _id: id,
+      userId: userId,
+    });
+
+    if (!transaction) throw new AppError("no such a transaction", 404);
+
+    res.status(200).json({
+      message: "transaction deleted!",
     });
   } catch (error) {
     next(error);
