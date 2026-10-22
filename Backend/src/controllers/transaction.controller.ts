@@ -11,11 +11,7 @@ export async function addTransaction(
   next: NextFunction,
 ): Promise<void> {
   try {
-    const { amount, type, category, description } = req.body;
-
-    if (!amount || !type || !category) {
-      throw new AppError("all fields are required", 400);
-    }
+    const { amount, type, category, description, date } = req.body;
 
     const user: IUserDocument = req.user;
 
@@ -25,6 +21,7 @@ export async function addTransaction(
       type,
       category,
       description,
+      date,
     });
 
     res.status(201).json({
@@ -36,7 +33,6 @@ export async function addTransaction(
 }
 
 // get transaction
-
 export async function getTransaction(
   req: Request,
   res: Response,
@@ -63,7 +59,6 @@ export async function getTransaction(
 }
 
 // delete transaction by id
-
 export async function deleteById(
   req: Request,
   res: Response,

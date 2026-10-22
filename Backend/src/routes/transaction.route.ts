@@ -5,12 +5,14 @@ import {
   deleteById,
   getTransaction,
 } from "../controllers/transaction.controller";
+import { transactionValidator } from "../validator/transaction.validator";
+import validate from "../middlewares/validate.middleware";
 
 // creating router
 const router = Router();
 
 //  add transaction
-router.post("/", authUser, addTransaction);
+router.post("/", authUser, transactionValidator, validate, addTransaction);
 
 // get transactions
 router.get("/", authUser, getTransaction);

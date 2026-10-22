@@ -12,6 +12,7 @@ export interface TransactionType {
   type: typeType; // validation for type
   category: string;
   description?: string;
+  date: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }

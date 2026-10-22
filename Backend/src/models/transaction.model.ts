@@ -24,6 +24,10 @@ const transactionSchema = new Schema<TransactionType>(
     description: {
       type: String,
     },
+    date: {
+      required: true,
+      type: Date,
+    },
   },
   {
     timestamps: true,
