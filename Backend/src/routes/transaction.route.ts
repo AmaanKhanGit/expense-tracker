@@ -6,6 +6,7 @@ import {
   getTransaction,
 } from "../controllers/transaction.controller";
 
+// creating router
 const router = Router();
 
 //  add transaction
