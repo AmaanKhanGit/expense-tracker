@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { TransactionType } from "../types/transaction.type";
+import { TransactionQuery, TransactionType } from "../types/transaction.type";
 import AppError from "../error/AppError";
 import transactionModel from "../models/transaction.model";
 import { IUserDocument } from "../types/user.type";
@@ -34,20 +34,35 @@ export async function addTransaction(
 
 // get transaction
 export async function getTransaction(
-  req: Request,
+  req: Request<{}, {}, {}, TransactionQuery>,
   res: Response,
   next: NextFunction,
 ) {
   try {
+    const { type, category, limit, page, startDate, endDate } = req.query;
+
     const userId = req.user._id;
 
+    const filter: any = { userId };
+
+    if (type) filter.type = type;
+    if (category) filter.category = category;
+
+    if (startDate || endDate) {
+      filter.date = {};
+
+      if (startDate) filter.date.$gte = new Date(startDate as string);
+      if (endDate) filter.date.$lte = new Date(endDate as string);
+    }
+
+    const parsedPage = page ? parseInt(page as string, 10) : 0;
+    const parsedLimit = limit ? parseInt(limit as string, 10) : 10;
+
     const transactions = await transactionModel
-      .find({
-        userId: userId,
-      })
+      .find(filter)
       .sort({ createdAt: -1 })
-      .skip(0)
-      .limit(10);
+      .skip((parsedPage - 1) * parsedLimit)
+      .limit(parsedLimit);
 
     res.status(200).json({
       message: "transaction fetched!",

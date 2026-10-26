@@ -1,4 +1,4 @@
-import { body, ValidationChain } from "express-validator";
+import { body, query, ValidationChain } from "express-validator";
 
 export const transactionValidator: ValidationChain[] = [
   body("amount")
@@ -38,4 +38,14 @@ export const transactionValidator: ValidationChain[] = [
     .withMessage("date must be in YYYY-MM-DD format")
     .isISO8601({ strict: true })
     .withMessage("invalid date format"),
+
+  query("page")
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage("can only contain numbers"),
+
+  query("limit")
+    .optional()
+    .isInt({ min: 1, max: 100 })
+    .withMessage("can only contain numbers between 1 to 100"),
 ];

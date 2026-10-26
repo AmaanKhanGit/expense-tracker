@@ -16,3 +16,12 @@ export interface TransactionType {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface TransactionQuery {
+  page?: string;
+  limit?: string;
+  type?: string;
+  category?: string;
+  startDate?: string;
+  endDate?: string;
+}
