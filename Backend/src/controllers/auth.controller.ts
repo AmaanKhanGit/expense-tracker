@@ -23,10 +23,6 @@ export async function registerUser(
   try {
     const { name, email, password } = req.body;
 
-    if (!name || !email || !password) {
-      throw new AppError("all field are required", 400);
-    }
-
     const userAlreadyExists = await userModel.findOne({
       $or: [{ email }],
     });
