@@ -58,10 +58,12 @@ export async function getTransaction(
     const parsedPage = page ? parseInt(page as string, 10) : 0;
     const parsedLimit = limit ? parseInt(limit as string, 10) : 10;
 
+    const calculatedSkip = page ? (parsedPage - 1) * parsedLimit : 0;
+
     const transactions = await transactionModel
       .find(filter)
       .sort({ createdAt: -1 })
-      .skip((parsedPage - 1) * parsedLimit)
+      .skip(calculatedSkip)
       .limit(parsedLimit);
 
     res.status(200).json({
