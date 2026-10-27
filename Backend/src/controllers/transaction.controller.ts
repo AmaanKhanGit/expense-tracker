@@ -55,10 +55,10 @@ export async function getTransaction(
       if (endDate) filter.date.$lte = new Date(endDate as string);
     }
 
-    const parsedPage = page ? parseInt(page as string, 10) : 0;
+    const parsedPage = page ? parseInt(page as string, 10) : 1;
     const parsedLimit = limit ? parseInt(limit as string, 10) : 10;
 
-    const calculatedSkip = page ? (parsedPage - 1) * parsedLimit : 0;
+    const calculatedSkip = (parsedPage - 1) * parsedLimit;
 
     const transactions = await transactionModel
       .find(filter)
@@ -66,9 +66,18 @@ export async function getTransaction(
       .skip(calculatedSkip)
       .limit(parsedLimit);
 
+    const totalTransactions = await transactionModel.countDocuments(filter);
+    const totalPages = Math.ceil(totalTransactions / parsedLimit);
+
     res.status(200).json({
       message: "transaction fetched!",
       transactions,
+      meta: {
+        page: parsedPage,
+        limit: parsedLimit,
+        totalTransactions,
+        totalPages,
+      },
     });
   } catch (error) {
     next(error);
