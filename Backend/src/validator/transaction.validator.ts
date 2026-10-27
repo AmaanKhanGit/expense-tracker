@@ -49,3 +49,45 @@ export const transactionValidator: ValidationChain[] = [
     .isInt({ min: 1, max: 100 })
     .withMessage("can only contain numbers between 1 to 100"),
 ];
+
+export const updateTransactionValidator: ValidationChain[] = [
+  body("id")
+    .notEmpty()
+    .withMessage("transaction id is required")
+    .isMongoId()
+    .withMessage("invalid transaction id"),
+
+  body("amount")
+    .optional()
+    .isFloat({ gt: 0 })
+    .withMessage("amount can only contain positive values"),
+
+  body("type")
+    .optional()
+    .trim()
+    .isIn(["income", "expense"])
+    .withMessage("can only contain income or expense type"),
+
+  body("category")
+    .optional()
+    .trim()
+    .isString()
+    .withMessage("can only contain string values")
+    .isLength({ max: 50 })
+    .withMessage("must not above 50 characters"),
+
+  body("description")
+    .optional()
+    .trim()
+    .isString()
+    .withMessage("can only contain string values")
+    .isLength({ max: 500 })
+    .withMessage("must not above 500 characters"),
+
+  body("date")
+    .optional()
+    .matches(/^\d{4}-\d{2}-\d{2}$/)
+    .withMessage("date must be in YYYY-MM-DD format")
+    .isISO8601({ strict: true })
+    .withMessage("invalid date format"),
+];

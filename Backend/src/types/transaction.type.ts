@@ -25,3 +25,25 @@ export interface TransactionQuery {
   startDate?: string;
   endDate?: string;
 }
+
+export interface TransactionUpdateBody {
+  id: Types.ObjectId;
+  amount?: number;
+  type?: typeType;
+  category?: string;
+  description?: string;
+  date?: Date;
+}
+
+export interface Identity {
+  _id: Types.ObjectId;
+  userId: Types.ObjectId;
+}
+
+export interface UpdateData {
+  amount: number;
+  category: string;
+  date: Date;
+  description: string;
+  type: string;
+}

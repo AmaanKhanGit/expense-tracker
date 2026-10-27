@@ -1,5 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { TransactionQuery, TransactionType } from "../types/transaction.type";
+import {
+  Identity,
+  TransactionQuery,
+  TransactionType,
+  TransactionUpdateBody,
+  UpdateData,
+} from "../types/transaction.type";
 import AppError from "../error/AppError";
 import transactionModel from "../models/transaction.model";
 import { IUserDocument } from "../types/user.type";
@@ -103,6 +109,56 @@ export async function deleteById(
 
     res.status(200).json({
       message: "transaction deleted!",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+// update transaction by id and user id
+
+export async function updateById(
+  req: Request<{}, {}, TransactionUpdateBody>,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { amount, category, date, description, type, id } = req.body;
+    const userId = req.user;
+
+    const identity: Partial<Identity> = {};
+    const updateData: Partial<UpdateData> = {};
+
+    if (!id) throw new AppError("no such a transaction", 404);
+
+    if (userId && id) {
+      identity.userId = userId._id;
+      identity._id = id;
+    }
+
+    if (amount) updateData.amount = amount;
+
+    if (category) updateData.category = category;
+
+    if (date) updateData.date = date;
+
+    if (description) updateData.description = description;
+
+    if (type) updateData.type = type;
+
+    if (Object.keys(updateData).length === 0)
+      throw new AppError("send atleast one field to update", 400);
+
+    const transaction = await transactionModel.findOneAndUpdate(
+      identity,
+      updateData,
+    );
+
+    if (!transaction) throw new AppError("no such a transaction", 404);
+
+    res.status(200).json({
+      message: "item updated successfully",
+      transaction,
     });
   } catch (error) {
     next(error);

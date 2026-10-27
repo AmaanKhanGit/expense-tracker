@@ -4,8 +4,12 @@ import {
   addTransaction,
   deleteById,
   getTransaction,
+  updateById,
 } from "../controllers/transaction.controller";
-import { transactionValidator } from "../validator/transaction.validator";
+import {
+  transactionValidator,
+  updateTransactionValidator,
+} from "../validator/transaction.validator";
 import validate from "../middlewares/validate.middleware";
 
 // creating router
@@ -19,5 +23,15 @@ router.get("/", authUser, getTransaction);
 
 // delete transaction by id
 router.post("/:id", authUser, deleteById);
+
+// update transaction by id and user id
+
+router.patch(
+  "/update",
+  authUser,
+  updateTransactionValidator,
+  validate,
+  updateById,
+);
 
 export default router;

@@ -19,7 +19,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 
 // transaction routes
-app.use("/api/transaction", transactionRoutes);
+app.use("/api/transactions", transactionRoutes);
 
 // error handler middleware
 app.use(errorHandler);
