@@ -2,9 +2,10 @@ import dotenv from "dotenv";
 dotenv.config();
 import express, { Application } from "express";
 import cookieParser from "cookie-parser";
-import authRoutes from "./routes/auth.routes";
 import { errorHandler } from "./middlewares/error.middleware";
-import transactionRoutes from "./routes/transaction.route";
+import authRoutes from "./routes/auth.routes";
+import transactionRoutes from "./routes/transaction.routes";
+import categoryRoutes from "./routes/category.routes";
 
 // create server instance
 const app: Application = express();
@@ -20,6 +21,9 @@ app.use("/api/auth", authRoutes);
 
 // transaction routes
 app.use("/api/transactions", transactionRoutes);
+
+// category routes
+app.use("/api/category", categoryRoutes);
 
 // error handler middleware
 app.use(errorHandler);
