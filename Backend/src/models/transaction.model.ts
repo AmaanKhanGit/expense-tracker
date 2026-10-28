@@ -4,7 +4,7 @@ import { TransactionType, typeType } from "../types/transaction.type";
 const transactionSchema = new Schema<TransactionType>(
   {
     userId: {
-      type: Types.ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
       ref: "user",
     },
