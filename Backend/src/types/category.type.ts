@@ -13,3 +13,7 @@ export interface CategoryType {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface CategoryRequest {
+  title: string;
+}
