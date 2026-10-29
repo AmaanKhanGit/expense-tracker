@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { CategoryKinds, CategoryRequest } from "../types/category.type";
 import { Types } from "mongoose";
 import categoryModel from "../models/category.model";
+import AppError from "../error/AppError";
 
 export async function addCategory(
   req: Request<{}, {}, CategoryRequest>,
@@ -12,6 +13,10 @@ export async function addCategory(
     const { title } = req.body;
 
     const createdBy: Types.ObjectId = req.user._id;
+
+    const isExists = await categoryModel.find({ title, createdBy });
+
+    if (isExists) throw new AppError("category already exists", 400);
 
     const category = await categoryModel.create({
       title,
