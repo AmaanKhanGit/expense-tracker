@@ -82,7 +82,10 @@ export async function deleteCategory(
         message: "deleted successfully",
         response,
       });
-    } else if (category.type === CategoryKinds.Default) {
+    } else if (
+      category.type === CategoryKinds.Default &&
+      !category.deletedBy.includes(createdBy)
+    ) {
       const response = await categoryModel.findByIdAndUpdate(id, {
         $push: { deletedBy: createdBy },
       });
