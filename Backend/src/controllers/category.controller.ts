@@ -78,13 +78,15 @@ export async function deleteCategory(
         createdBy,
       });
 
+      if (!response) throw new AppError("category not found", 404);
+
       res.status(200).json({
         message: "deleted successfully",
         response,
       });
     } else if (
       category.type === CategoryKinds.Default &&
-      !category.deletedBy.includes(createdBy)
+      !category.deletedBy.some((id) => id.toString() === createdBy.toString())
     ) {
       const response = await categoryModel.findByIdAndUpdate(id, {
         $push: { deletedBy: createdBy },
