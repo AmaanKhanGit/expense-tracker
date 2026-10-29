@@ -1,84 +1,72 @@
 [
   {
-    "title": "Food",
+    "title": "food",
     "type": "default",
     "createdBy": null,
     "deletedBy": []
   },
   {
-    "title": "Transport",
+    "title": "transport",
     "type": "default",
     "createdBy": null,
     "deletedBy": []
   },
   {
-    "title": "Shopping",
+    "title": "shopping",
     "type": "default",
     "createdBy": null,
     "deletedBy": []
   },
   {
-    "title": "Bills",
+    "title": "bills",
     "type": "default",
     "createdBy": null,
     "deletedBy": []
   },
   {
-    "title": "Entertainment",
+    "title": "entertainment",
     "type": "default",
     "createdBy": null,
     "deletedBy": []
   },
   {
-    "title": "Health",
+    "title": "health",
     "type": "default",
     "createdBy": null,
     "deletedBy": []
   },
   {
-    "title": "Education",
+    "title": "education",
     "type": "default",
     "createdBy": null,
     "deletedBy": []
   },
   {
-    "title": "Groceries",
+    "title": "groceries",
     "type": "default",
     "createdBy": null,
     "deletedBy": []
   },
   {
-    "title": "Travel",
+    "title": "salary",
     "type": "default",
     "createdBy": null,
     "deletedBy": []
   },
   {
-    "title": "Personal Care",
+    "title": "freelancing",
     "type": "default",
     "createdBy": null,
     "deletedBy": []
   },
   {
-    "title": "Salary",
+    "title": "investment",
     "type": "default",
     "createdBy": null,
     "deletedBy": []
   },
   {
-    "title": "Freelancing",
-    "type": "default",
-    "createdBy": null,
-    "deletedBy": []
-  },
-  {
-    "title": "Investment",
-    "type": "default",
-    "createdBy": null,
-    "deletedBy": []
-  },
-  {
-    "title": "Other",
+    "title": "other",
     "type": "default",
     "createdBy": null,
     "deletedBy": []
