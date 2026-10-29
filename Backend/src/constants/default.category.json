@@ -1,0 +1,86 @@
+[
+  {
+    "title": "Food",
+    "type": "default",
+    "createdBy": null,
+    "deletedBy": []
+  },
+  {
+    "title": "Transport",
+    "type": "default",
+    "createdBy": null,
+    "deletedBy": []
+  },
+  {
+    "title": "Shopping",
+    "type": "default",
+    "createdBy": null,
+    "deletedBy": []
+  },
+  {
+    "title": "Bills",
+    "type": "default",
+    "createdBy": null,
+    "deletedBy": []
+  },
+  {
+    "title": "Entertainment",
+    "type": "default",
+    "createdBy": null,
+    "deletedBy": []
+  },
+  {
+    "title": "Health",
+    "type": "default",
+    "createdBy": null,
+    "deletedBy": []
+  },
+  {
+    "title": "Education",
+    "type": "default",
+    "createdBy": null,
+    "deletedBy": []
+  },
+  {
+    "title": "Groceries",
+    "type": "default",
+    "createdBy": null,
+    "deletedBy": []
+  },
+  {
+    "title": "Travel",
+    "type": "default",
+    "createdBy": null,
+    "deletedBy": []
+  },
+  {
+    "title": "Personal Care",
+    "type": "default",
+    "createdBy": null,
+    "deletedBy": []
+  },
+  {
+    "title": "Salary",
+    "type": "default",
+    "createdBy": null,
+    "deletedBy": []
+  },
+  {
+    "title": "Freelancing",
+    "type": "default",
+    "createdBy": null,
+    "deletedBy": []
+  },
+  {
+    "title": "Investment",
+    "type": "default",
+    "createdBy": null,
+    "deletedBy": []
+  },
+  {
+    "title": "Other",
+    "type": "default",
+    "createdBy": null,
+    "deletedBy": []
+  }
+]
