@@ -15,7 +15,7 @@ export async function addCategory(
 
     const createdBy: Types.ObjectId = req.user._id;
 
-    const isExists = await categoryModel.find({ title, createdBy });
+    const isExists = await categoryModel.findOne({ title, createdBy });
 
     if (isExists) throw new AppError("category already exists", 400);
 
