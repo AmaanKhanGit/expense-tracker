@@ -4,6 +4,7 @@ import { Types } from "mongoose";
 import categoryModel from "../models/category.model";
 import AppError from "../error/AppError";
 
+// add categories
 export async function addCategory(
   req: Request<{}, {}, CategoryRequest>,
   res: Response,
@@ -29,6 +30,72 @@ export async function addCategory(
       category,
     });
   } catch (error) {
+    next(error);
+  }
+}
+
+// get categories
+export async function getCategories(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const createdBy = req.user._id;
+
+    const categories = await categoryModel.find({
+      $or: [{ type: CategoryKinds.Default }, { createdBy: createdBy }],
+      $nor: [{ deletedBy: createdBy }],
+    });
+
+    res.status(200).json({
+      message: "category fetched",
+      categories,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+// delete catgory
+export async function deleteCategory(
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const id = req.params.id;
+
+    const createdBy: Types.ObjectId = req.user._id;
+
+    const category = await categoryModel.findById(id);
+
+    if (!category) throw new AppError("category not found", 404);
+
+    if (category?.type === CategoryKinds.Custom) {
+      const response = await categoryModel.findOneAndDelete({
+        _id: id,
+        createdBy,
+      });
+
+      res.status(200).json({
+        message: "deleted successfully",
+        response,
+      });
+    } else if (category.type === CategoryKinds.Default) {
+      const response = await categoryModel.findByIdAndUpdate(id, {
+        $push: { deletedBy: createdBy },
+      });
+
+      res.status(200).json({
+        message: "deleted successfully",
+        response,
+      });
+    } else {
+      throw new AppError("bad request", 400);
+    }
+  } catch (error) {
+    console.log(error);
     next(error);
   }
 }
