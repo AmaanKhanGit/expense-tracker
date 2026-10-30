@@ -3,10 +3,11 @@ dotenv.config();
 import express, { Application } from "express";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./middlewares/error.middleware";
+
 import authRoutes from "./routes/auth.routes";
 import transactionRoutes from "./routes/transaction.routes";
 import categoryRoutes from "./routes/category.routes";
-import analyticsRoutes from "./routes/analytics.routes"
+import analyticsRoutes from "./routes/analytics.routes";
 
 // create server instance
 const app: Application = express();
@@ -27,7 +28,7 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/category", categoryRoutes);
 
 // analytics routes
-app.use("/api/analytics",analyticsRoutes)
+app.use("/api/analytics", analyticsRoutes);
 
 // error handler middleware
 app.use(errorHandler);
