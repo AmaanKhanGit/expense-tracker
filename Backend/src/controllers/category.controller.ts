@@ -72,6 +72,7 @@ export async function deleteCategory(
 
     if (!category) throw new AppError("category not found", 404);
 
+    // delete if its custom category
     if (category?.type === CategoryKinds.Custom) {
       const response = await categoryModel.findOneAndDelete({
         _id: id,
@@ -84,7 +85,9 @@ export async function deleteCategory(
         message: "deleted successfully",
         response,
       });
-    } else if (
+    } 
+    // delete if its default category
+    else if (
       category.type === CategoryKinds.Default &&
       !category.deletedBy.some((id) => id.toString() === createdBy.toString())
     ) {
