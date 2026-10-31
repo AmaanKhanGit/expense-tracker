@@ -54,11 +54,9 @@ export async function getAnalytics(
       },
     ]);
 
-    console.log(result);
-
     res.status(200).json({
       message: "analytics fetched",
-      result,
+      analytics: result[0],
     });
   } catch (error) {
     next(error);
