@@ -62,3 +62,38 @@ export async function getAnalytics(
     next(error);
   }
 }
+
+export async function getCategoryBreakdown(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const userId = req.user._id;
+
+    const result = await transactionModel.aggregate([
+      { $match: { userId, type: "expense" } },
+      {
+        $group: {
+          _id: "$category",
+          totalExpense: { $sum: "$amount" },
+        },
+      },
+      {
+        $sort: {
+          totalExpense: -1,
+        },
+      },
+      {
+        $project: { _id: 0, category: "$_id", totalExpense: 1 },
+      },
+    ]);
+
+    res.status(200).json({
+      message: "data fetched",
+      result,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
