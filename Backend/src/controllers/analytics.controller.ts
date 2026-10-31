@@ -55,8 +55,8 @@ export async function getAnalytics(
     ]);
 
     res.status(200).json({
-      message: "analytics fetched",
-      analytics: result[0],
+      message: "data fetched",
+      analytics: result,
     });
   } catch (error) {
     next(error);
@@ -97,3 +97,106 @@ export async function getCategoryBreakdown(
     next(error);
   }
 }
+
+export async function getMonthlyTrend(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const userId = req.user._id;
+
+    const result = await transactionModel.aggregate([
+      {
+        $match: { userId },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: "%Y-%m",
+              date: "$date",
+              timezone: "Asia/Kolkata",
+            },
+          },
+          totalIncome: {
+            $sum: {
+              $cond: [{ $eq: ["$type", "income"] }, "$amount", 0],
+            },
+          },
+          totalExpense: {
+            $sum: {
+              $cond: [{ $eq: ["$type", "expense"] }, "$amount", 0],
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          month: "$_id",
+          totalIncome: 1,
+          totalExpense: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      message: "data fetched!",
+      result,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+// MY APPROACH
+
+// const result = await transactionModel.aggregate([
+//   { $match: { userId } },
+//   {
+//     $group: {
+//       _id: {
+//         month: { $month: "$date" },
+//         year: { $year: "$date" },
+//       },
+//       totalIncome: {
+//         $sum: {
+//           $cond: [{ $eq: ["$type", "income"] }, "$amount", 0],
+//         },
+//       },
+//       totalExpense: {
+//         $sum: {
+//           $cond: [{ $eq: ["$type", "expense"] }, "$amount", 0],
+//         },
+//       },
+//     },
+//   },
+//   {
+//     $sort: {
+//         "_id.year": 1,
+//         "_id.month": 1,
+
+//     },
+//   },
+
+//   {
+//     $project: {
+//       _id: 0,
+//       month: {
+//         $concat: [
+//           { $toString: "$_id.year" },
+//           "-",
+//           { $toString: "$_id.month" },
+//         ],
+//       },
+//       totalExpense: 1,
+//       totalIncome: 1,
+//     },
+//   },
+// ]);
