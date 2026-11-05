@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth.routes";
 import transactionRoutes from "./routes/transaction.routes";
 import categoryRoutes from "./routes/category.routes";
 import analyticsRoutes from "./routes/analytics.routes";
+import budgetRoutes from "./routes/budget.routes";
 
 // create server instance
 const app: Application = express();
@@ -29,6 +30,9 @@ app.use("/api/category", categoryRoutes);
 
 // analytics routes
 app.use("/api/analytics", analyticsRoutes);
+
+// budget routes
+app.use("/api/budget", budgetRoutes);
 
 // error handler middleware
 app.use(errorHandler);
