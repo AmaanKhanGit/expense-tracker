@@ -21,6 +21,12 @@ export function errorHandler(
   } else if (err instanceof mongoose.Error.CastError) {
     statusCode = 400;
     message = "invalid id format";
+  } else if (
+    err instanceof mongoose.mongo.MongoServerError &&
+    err.code === 11000
+  ) {
+    statusCode = 409;
+    message = "budget already exists for this category and month";
   } else {
     console.error(err);
   }
