@@ -11,16 +11,21 @@ export async function addCategory(
   next: NextFunction,
 ) {
   try {
-    const { title } = req.body;
+    const { title, categoryType } = req.body;
 
     const createdBy: Types.ObjectId = req.user._id;
 
-    const isExists = await categoryModel.findOne({ title, createdBy });
+    const isExists = await categoryModel.findOne({
+      title,
+      createdBy,
+      categoryType,
+    });
 
     if (isExists) throw new AppError("category already exists", 400);
 
     const category = await categoryModel.create({
       title,
+      categoryType,
       type: CategoryKinds.Custom,
       createdBy,
     });
@@ -85,7 +90,7 @@ export async function deleteCategory(
         message: "deleted successfully",
         response,
       });
-    } 
+    }
     // delete if its default category
     else if (
       category.type === CategoryKinds.Default &&

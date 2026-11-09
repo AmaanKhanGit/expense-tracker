@@ -1,5 +1,9 @@
 import mongoose, { Model, Schema, Types } from "mongoose";
-import { CategoryType, CategoryKinds } from "../types/category.type";
+import {
+  CategoryType,
+  CategoryKinds,
+  CategoryTypeEnum,
+} from "../types/category.type";
 
 const categorySchema = new Schema<CategoryType>(
   {
@@ -15,6 +19,11 @@ const categorySchema = new Schema<CategoryType>(
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: "user",
+    },
+    categoryType: {
+      type: String,
+      enum: Object.values(CategoryTypeEnum),
+      required: true,
     },
     deletedBy: {
       type: [Schema.Types.ObjectId],
