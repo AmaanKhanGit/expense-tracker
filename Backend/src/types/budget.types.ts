@@ -9,3 +9,10 @@ export interface BudgetType {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+
+export interface BudgetQueryType {
+  month?: number;
+  year?: number;
+  category?: string;
+}

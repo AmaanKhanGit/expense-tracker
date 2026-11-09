@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { BudgetType } from "../types/budget.types";
+import { BudgetQueryType, BudgetType } from "../types/budget.types";
 import budgetModel from "../models/budget.model";
 import AppError from "../error/AppError";
 import categoryModel from "../models/category.model";
-import { CategoryKinds } from "../types/category.type";
+import { CategoryKinds, CategoryTypeEnum } from "../types/category.type";
 
 export async function createBudget(
   req: Request<{}, {}, BudgetType>,
@@ -16,12 +16,19 @@ export async function createBudget(
     const userId = req.user._id;
 
     const isCategoryExists = await categoryModel.findOne({
+      title: category,
+      categoryType: CategoryTypeEnum.Expense,
       $or: [
-        { title: category, type: CategoryKinds.Custom, createdBy: userId },
-        { title: category, type: CategoryKinds.Default },
+        {
+          type: CategoryKinds.Custom,
+          createdBy: userId,
+        },
+        {
+          type: CategoryKinds.Default,
+          deletedBy: { $ne: userId },
+        },
       ],
     });
-
     if (!isCategoryExists) throw new AppError("category does not exists", 404);
 
     const budget = await budgetModel.create({
@@ -34,6 +41,35 @@ export async function createBudget(
 
     res.status(201).json({
       message: "budget created successfully",
+      budget,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getBudget(
+  req: Request<{}, {}, {}, BudgetQueryType>,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const userId = req.user._id;
+
+    const { category, month, year } = req.query;
+
+    const filter: any = { userId };
+
+    if (category) filter.category = category;
+    if (month) filter.month = month;
+    if (year) filter.year = year;
+
+    const budget = await budgetModel
+      .find(filter)
+      .sort({ year: -1, month: -1, createdAt: -1 });
+
+    res.status(200).json({
+      message: "bueget fetched",
       budget,
     });
   } catch (error) {
