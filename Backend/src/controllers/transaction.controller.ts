@@ -137,13 +137,9 @@ export async function updateById(
     }
 
     if (amount) updateData.amount = amount;
-
     if (category) updateData.category = category;
-
     if (date) updateData.date = date;
-
     if (description) updateData.description = description;
-
     if (type) updateData.type = type;
 
     if (Object.keys(updateData).length === 0)
