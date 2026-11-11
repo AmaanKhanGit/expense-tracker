@@ -1,5 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { BudgetQueryType, BudgetType } from "../types/budget.types";
+import {
+  BudgetIdentity,
+  BudgetQueryType,
+  BudgetType,
+  BudgetUpdateType,
+} from "../types/budget.types";
 import budgetModel from "../models/budget.model";
 import AppError from "../error/AppError";
 import categoryModel from "../models/category.model";
@@ -71,6 +76,78 @@ export async function getBudget(
     res.status(200).json({
       message: "bueget fetched",
       budget,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updateBudget(
+  req: Request<{ id: string }, {}, BudgetUpdateType>,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { category, amount, month, year } = req.body;
+
+    const { id } = req.params;
+
+    const userId = req.user._id;
+
+    const filter: Partial<BudgetUpdateType> = {};
+
+    const identity: Partial<BudgetIdentity> = {};
+
+    if (userId && id) {
+      identity.userId = userId;
+      identity._id = id;
+    }
+
+    if (Object.keys(identity).length === 0)
+      throw new AppError("Invalid budget identifier", 400);
+
+    if (category) filter.category = category;
+    if (amount) filter.amount = amount;
+    if (year) filter.year = year;
+    if (month) filter.month = month;
+
+    // checking if filter is empty
+    if (Object.keys(filter).length === 0)
+      throw new AppError("send atleast one field to update", 400);
+
+    const response = await budgetModel.findOneAndUpdate(identity, filter, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!response) throw new AppError("no such a budget", 404);
+
+    res.status(200).json({
+      message: "budget updated successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function deleteBudget(
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { id } = req.params;
+
+    const userId = req.user._id;
+
+    const response = await budgetModel.findOneAndDelete({ userId, _id: id });
+
+    console.log(response);
+
+    if (!response) throw new AppError("no such a budget", 404);
+
+    res.status(200).json({
+      message: "budget deleted successfully",
     });
   } catch (error) {
     next(error);

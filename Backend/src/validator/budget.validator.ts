@@ -1,4 +1,4 @@
-import { body, ValidationChain } from "express-validator";
+import { body, param, ValidationChain } from "express-validator";
 
 export const budgetValidator: ValidationChain[] = [
   body("category")
@@ -21,4 +21,32 @@ export const budgetValidator: ValidationChain[] = [
     .withMessage("can not be empty")
     .isInt({ min: 2000, max: 2100 })
     .withMessage("invalid year"),
+];
+
+export const budgetUpdateValidator: ValidationChain[] = [
+  body("category")
+    .trim()
+    .optional()
+    .notEmpty()
+    .withMessage("category can not be empty")
+    .toLowerCase(),
+  body("amount")
+    .optional()
+    .isInt({ min: 1000 })
+    .withMessage("Budget amount must be at least 1000.")
+    .toInt(),
+  body("month")
+    .optional()
+    .isInt({ min: 1, max: 12 })
+    .withMessage("invalid month")
+    .toInt(),
+  body("year")
+    .optional()
+    .isInt({ min: 2000, max: 2100 })
+    .withMessage("invalid year")
+    .toInt(),
+];
+
+export const budgetIdValidator: ValidationChain[] = [
+  param("id").isMongoId().withMessage("Invalid budget ID"),
 ];
