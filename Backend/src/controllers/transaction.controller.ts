@@ -92,7 +92,7 @@ export async function getTransaction(
 
 // delete transaction by id
 export async function deleteById(
-  req: Request,
+  req: Request<{ id: string }>,
   res: Response,
   next: NextFunction,
 ) {
