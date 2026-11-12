@@ -9,6 +9,7 @@ import budgetModel from "../models/budget.model";
 import AppError from "../error/AppError";
 import categoryModel from "../models/category.model";
 import { CategoryKinds, CategoryTypeEnum } from "../types/category.type";
+import transactionModel from "../models/transaction.model";
 
 export async function createBudget(
   req: Request<{}, {}, BudgetType>,
@@ -148,6 +149,110 @@ export async function deleteBudget(
 
     res.status(200).json({
       message: "budget deleted successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function budgetOverview(
+  req: Request<{}, {}, {}, BudgetQueryType>,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const month = Number(req.query.month);
+    const year = Number(req.query.year);
+
+    const userId = req.user._id;
+
+    const filter: Partial<BudgetQueryType> = {};
+
+    if (month) filter.month = month;
+    if (year) filter.year = year;
+
+    console.log(filter);
+
+    const budgetResult = await budgetModel.aggregate([
+      { $match: { userId, ...filter } },
+      {
+        $group: {
+          _id: null,
+          totalBudget: { $sum: "$amount" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          totalBudget: 1,
+        },
+      },
+    ]);
+
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 1);
+
+    const transactionResult = await transactionModel.aggregate([
+      {
+        $match: {
+          userId,
+          type: "expense",
+          date: {
+            $gte: startDate,
+            $lt: endDate,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalSpent: { $sum: "$amount" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          totalSpent: 1,
+        },
+      },
+    ]);
+
+    const [{ totalBudget = 0 } = {}] = budgetResult;
+    const [{ totalSpent = 0 } = {}] = transactionResult;
+
+    const remainingBudget = totalBudget - totalSpent;
+
+    const percentageUsed =
+      totalBudget > 0
+        ? Number(((totalSpent / totalBudget) * 100).toFixed(2))
+        : 0;
+
+    const status =
+      totalBudget === 0
+        ? "no_budget"
+        : totalSpent > totalBudget
+          ? "over_budget"
+          : totalSpent === totalBudget
+            ? "fully_used"
+            : "under_budget";
+
+    console.log(
+      totalBudget,
+      totalSpent,
+      remainingBudget,
+      percentageUsed,
+      status,
+    );
+
+    res.status(200).json({
+      message: "data fetched!",
+      data: {
+        totalBudget,
+        totalSpent,
+        remainingBudget,
+        percentageUsed,
+        status,
+      },
     });
   } catch (error) {
     next(error);

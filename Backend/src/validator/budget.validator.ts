@@ -1,4 +1,4 @@
-import { body, param, ValidationChain } from "express-validator";
+import { body, param, query, ValidationChain } from "express-validator";
 
 export const budgetValidator: ValidationChain[] = [
   body("category")
@@ -47,3 +47,7 @@ export const budgetUpdateValidator: ValidationChain[] = [
     .toInt(),
 ];
 
+export const budgetQueryValidator: ValidationChain[] = [
+  query("month").optional().toInt().isInt({ min: 1, max: 12 }),
+  query("year").optional().toInt().isInt({ min: 2000, max: 2100 }),
+];

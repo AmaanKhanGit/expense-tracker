@@ -1,11 +1,13 @@
 import { Router } from "express";
 import {
+  budgetQueryValidator,
   budgetUpdateValidator,
   budgetValidator,
 } from "../validator/budget.validator";
 import validate from "../middlewares/validate.middleware";
 import { authUser } from "../middlewares/auth.middleware";
 import {
+  budgetOverview,
   createBudget,
   deleteBudget,
   getBudget,
@@ -33,5 +35,14 @@ router.patch(
 
 // delete budget route
 router.delete("/:id", authUser, idValidator, validate, deleteBudget);
+
+// budget overview route
+router.get(
+  "/overview",
+  authUser,
+  budgetQueryValidator,
+  validate,
+  budgetOverview,
+);
 
 export default router;
