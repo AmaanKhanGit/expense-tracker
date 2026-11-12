@@ -7,6 +7,7 @@ import {
 } from "../controllers/category.controller";
 import { addCategoryValidator } from "../validator/category.validator";
 import validate from "../middlewares/validate.middleware";
+import { idValidator } from "../validator/params.validator";
 
 const router = Router();
 
@@ -17,6 +18,6 @@ router.post("/", authUser, addCategoryValidator, validate, addCategory);
 router.get("/", authUser, getCategories);
 
 // delete category
-router.delete("/:id", authUser, deleteCategory);
+router.delete("/:id", authUser, idValidator, validate, deleteCategory);
 
 export default router;

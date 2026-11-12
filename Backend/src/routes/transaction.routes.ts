@@ -11,6 +11,7 @@ import {
   updateTransactionValidator,
 } from "../validator/transaction.validator";
 import validate from "../middlewares/validate.middleware";
+import { idValidator } from "../validator/params.validator";
 
 // creating router
 const router = Router();
@@ -22,7 +23,7 @@ router.post("/", authUser, transactionValidator, validate, addTransaction);
 router.get("/", authUser, getTransaction);
 
 // delete transaction by id
-router.post("/:id", authUser, deleteById);
+router.post("/:id", authUser, idValidator, validate, deleteById);
 
 // update transaction by id and user id
 

@@ -47,6 +47,3 @@ export const budgetUpdateValidator: ValidationChain[] = [
     .toInt(),
 ];
 
-export const budgetIdValidator: ValidationChain[] = [
-  param("id").isMongoId().withMessage("Invalid budget ID"),
-];

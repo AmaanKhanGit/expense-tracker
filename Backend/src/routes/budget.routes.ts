@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  budgetIdValidator,
   budgetUpdateValidator,
   budgetValidator,
 } from "../validator/budget.validator";
@@ -12,6 +11,7 @@ import {
   getBudget,
   updateBudget,
 } from "../controllers/budget.controller";
+import { idValidator } from "../validator/params.validator";
 
 const router = Router();
 
@@ -26,12 +26,12 @@ router.patch(
   "/:id",
   authUser,
   budgetUpdateValidator,
-  budgetIdValidator,
+  idValidator,
   validate,
   updateBudget,
 );
 
 // delete budget route
-router.delete("/:id", authUser, budgetIdValidator, validate, deleteBudget);
+router.delete("/:id", authUser, idValidator, validate, deleteBudget);
 
 export default router;
