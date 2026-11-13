@@ -48,6 +48,16 @@ export const budgetUpdateValidator: ValidationChain[] = [
 ];
 
 export const budgetQueryValidator: ValidationChain[] = [
-  query("month").optional().toInt().isInt({ min: 1, max: 12 }),
-  query("year").optional().toInt().isInt({ min: 2000, max: 2100 }),
+  query("month")
+    .trim()
+    .notEmpty()
+    .withMessage("month is neccesary")
+    .toInt()
+    .isInt({ min: 1, max: 12 }),
+  query("year")
+    .trim()
+    .notEmpty()
+    .withMessage("month is neccesary")
+    .toInt()
+    .isInt({ min: 2000, max: 2100 }),
 ];
