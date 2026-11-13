@@ -169,11 +169,6 @@ export async function budgetOverview(
 
     const userId = req.user._id;
 
-    const filter: Partial<BudgetQueryType> = {};
-
-    if (month) filter.month = month;
-    if (year) filter.year = year;
-
     const { remainingBudget, status, totalBudget, totalSpent, percentageUsed } =
       await getOverviewService(userId, month, year);
 
